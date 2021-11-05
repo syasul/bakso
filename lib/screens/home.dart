@@ -1,12 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 // import 'package:geolocator/geolocator.dart';
 // import 'package:show_bakso/API/PostLocation.dart';
 import 'package:show_bakso/screens/Map.dart';
 import 'package:show_bakso/screens/Map2.dart';
 import 'package:slide_to_confirm/slide_to_confirm.dart';
-import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
   @override

@@ -35,7 +35,7 @@ dependencies:
   auto_size_text_field: ^1.0.1
   http: ^0.13.4
   google_maps_flutter: ^2.1.0
-  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

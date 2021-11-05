@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -69,7 +67,9 @@ class _DetailPesananPanjangState extends State<DetailPesananPanjang> {
                         children: [
                           GestureDetector(
                             onTap: () async {
-                              await _bottomSheet(context , );
+                              await _bottomSheet(
+                                context,
+                              );
                             },
                             child: Container(child: (() {
                               if (widget.order1.jumlah > 0) {
@@ -1169,7 +1169,6 @@ class _DetailPesananPanjangState extends State<DetailPesananPanjang> {
       ),
     );
   }
-  
 }
 
 _bottomSheet(context) {

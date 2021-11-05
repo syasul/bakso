@@ -1,12 +1,51 @@
-import 'package:show_bakso/screens/login.dart';
-import 'package:show_bakso/widget/buttonregister.dart';
-import 'package:show_bakso/widget/form_body.dart';
-import 'package:show_bakso/widget/sosmed.dart';
+import 'dart:convert';
+
+import 'package:show_bakso/widget/form%20+%20button_reg.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class RegisterPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   RegisterPage({Key key}) : super(key: key);
+
+  final TextEditingController emailcontroller = TextEditingController();
+
+  final TextEditingController passwordcontroller = TextEditingController();
+
+  final TextEditingController usernamecontroller = TextEditingController();
+
+  final TextEditingController idnumbercontroller = TextEditingController();
+
+  final TextEditingController numbercontroller = TextEditingController();
+
+  final TextEditingController namecontroller = TextEditingController();
+
+  Future<PostLoc> postLoc() async {
+    final response = await http.post(
+      Uri.parse('https://liveshow.utter.academy/api/register'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': emailcontroller.text,
+        'password': passwordcontroller.text,
+        'username': usernamecontroller.text,
+        'id_number': idnumbercontroller.text,
+        'phone_number': numbercontroller.text,
+        'name': namecontroller.text
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      return PostLoc.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +60,8 @@ class RegisterPage extends StatelessWidget {
                   width: size.width * 1,
                   margin: EdgeInsets.only(top: size.height * 0.055),
                   child: Image.asset(
-                    "assets/images/Vector2.png",fit: BoxFit.cover,
+                    "assets/images/Vector2.png",
+                    fit: BoxFit.cover,
                   ),
                 ),
                 Container(
@@ -30,94 +70,14 @@ class RegisterPage extends StatelessWidget {
                       right: size.width * 0.05,
                       top: size.height * 0.16),
                   child: Container(
-                    child: Column(
-                      children: [
-                        Container(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            'Buat Akun,',
-                            style:
-                                TextStyle(fontFamily: 'Poppins', fontSize: size.width * 0.07),
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            'Silahkan register untuk daftar',
-                            style: TextStyle(fontSize: size.width * 0.055),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: size.height * 0.1),
-                          child: Container(
-                            child: FormLog(
-                              formKey: _formKey,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: size.height * 0.05),
-                          child: ButtonRegister(
-                            formKey: _formKey,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: size.height * 0.04),
-                          child: Container(
-                            child: Text(
-                              'Atau',
-                              style: TextStyle(fontFamily: 'Poppins'),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: size.height * 0.03),
-                          child: Container(
-                            child: Sosmed(),
-                          ),
-                        ),
-                        SizedBox(
-                          height: size.height * 0.1,
-                        ),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                child: Text(
-                                  'Anda sudah punya akun?',
-                                  style: TextStyle(fontFamily: 'Poppins'),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsets.only(left: size.width * 0.01),
-                                child: Container(
-                                  child: GestureDetector(
-                                    child: Text(
-                                      'Login',
-                                      style: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          color: Color(0xFFEA8F06)),
-                                    ),
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) {
-                                            return LoginPage();
-                                          },
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+                    child: FormReg(
+                        size: size,
+                        namecontroller: namecontroller,
+                        emailcontroller: emailcontroller,
+                        usernamecontroller: usernamecontroller,
+                        passwordcontroller: passwordcontroller,
+                        numbercontroller: numbercontroller,
+                        idnumbercontroller: idnumbercontroller),
                   ),
                 ),
               ],
