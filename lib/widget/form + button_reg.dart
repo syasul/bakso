@@ -1,9 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:show_bakso/API/regisapi.dart';
 import 'package:show_bakso/screens/login.dart';
 import 'package:show_bakso/widget/sosmed.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class FormReg extends StatelessWidget {
+  Future<ApiRegister> registerapi() async {
+    final response = await http.post(
+      Uri.parse('https://liveshow.utter.academy/api/register'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': this.emailcontroller.text,
+        'password': this.passwordcontroller.text,
+        'username': this.usernamecontroller.text,
+        'id_number': this.idnumbercontroller.text,
+        'phone_number': this.numbercontroller.text,
+        'name': this.namecontroller.text
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      return ApiRegister.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed');
+    }
+  }
+
   const FormReg({
     Key key,
     @required this.size,
@@ -164,15 +194,16 @@ class FormReg extends StatelessWidget {
                     primary: Color(0xFFEA8F06),
                     shape: RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(10.0))),
-                onPressed: () {
-                  // if (formKey.currentState.validate()) {
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       builder: (context) => Home(),
-                  //     ),
-                  //   );
-                  // }
+                onPressed: () async {
+                  final String name = namecontroller.text;
+                  final String email = emailcontroller.text;
+                  final String username = usernamecontroller.text;
+                  final String password = passwordcontroller.text;
+                  final String number = numbercontroller.text;
+                  final String idnumber = idnumbercontroller.text;
+
+                  final ApiRegister user = await registerapi(
+                      name, email, username, password, number, idnumber);
                 },
                 child: Center(
                   child: Text(
