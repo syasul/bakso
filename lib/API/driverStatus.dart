@@ -1,11 +1,13 @@
 import 'dart:convert';
 
-PostLoc postLocFromJson(String str) => PostLoc.fromJson(json.decode(str));
+DriverSetStatus driverSetStatusFromJson(String str) =>
+    DriverSetStatus.fromJson(json.decode(str));
 
-String postLocToJson(PostLoc data) => json.encode(data.toJson());
+String driverSetStatusToJson(DriverSetStatus data) =>
+    json.encode(data.toJson());
 
-class PostLoc {
-  PostLoc({
+class DriverSetStatus {
+  DriverSetStatus({
     this.status,
     this.values,
   });
@@ -13,7 +15,8 @@ class PostLoc {
   int status;
   Values values;
 
-  factory PostLoc.fromJson(Map<String, dynamic> json) => PostLoc(
+  factory DriverSetStatus.fromJson(Map<String, dynamic> json) =>
+      DriverSetStatus(
         status: json["status"],
         values: Values.fromJson(json["values"]),
       );

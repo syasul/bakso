@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:show_bakso/API/PostLocation.dart';
 import 'package:show_bakso/API/regisapi.dart';
+import 'package:show_bakso/screens/home.dart';
 import 'package:show_bakso/screens/login.dart';
 import 'package:show_bakso/widget/sosmed.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FormReg extends StatelessWidget {
+  String condition = "";
+
   Future<ApiRegister> registerapi() async {
     final response = await http.post(
       Uri.parse('https://liveshow.utter.academy/api/register'),
@@ -34,7 +40,32 @@ class FormReg extends StatelessWidget {
     }
   }
 
-  const FormReg({
+  Future<PostLoc> postLoc(int id) async {
+    Position position = await Geolocator.getCurrentPosition();
+    final response = await http.post(
+      Uri.parse('https://liveshow.utter.academy/api/insert'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, num>{
+        'driver_id': id,
+        'latitude': position.latitude,
+        'longitude': position.longitude,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      return PostLoc.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed');
+    }
+  }
+
+  FormReg({
     Key key,
     @required this.size,
     @required this.namecontroller,
@@ -91,41 +122,51 @@ class FormReg extends StatelessWidget {
                   validator: MultiValidator(
                       [RequiredValidator(errorText: "Masukkan Nama")]),
                 ),
-                TextFormField(
-                  controller: emailcontroller,
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Color(0xFFEA8F06))),
-                    focusColor: Color(0xFFEA8F06),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFEA8F06))),
-                    hintText: 'Email',
+                Container(
+                  margin: EdgeInsets.only(
+                    top: 5,
                   ),
-                  validator: MultiValidator([
-                    RequiredValidator(errorText: "Masukkan Email"),
-                    EmailValidator(errorText: "Email tidak valid"),
-                  ]),
-                ),
-                TextFormField(
-                  controller: usernamecontroller,
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Color(0xFFEA8F06))),
-                    focusColor: Color(0xFFEA8F06),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFEA8F06))),
-                    hintText: 'Username',
+                  child: TextFormField(
+                    controller: emailcontroller,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Color(0xFFEA8F06))),
+                      focusColor: Color(0xFFEA8F06),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFEA8F06))),
+                      hintText: 'Email',
+                    ),
+                    validator: MultiValidator([
+                      RequiredValidator(errorText: "Masukkan Email"),
+                      EmailValidator(errorText: "Email tidak valid"),
+                    ]),
                   ),
-                  validator: MultiValidator([
-                    RequiredValidator(errorText: "Masukkan  Username"),
-                    EmailValidator(errorText: "Username tidak valid"),
-                  ]),
                 ),
                 Container(
                   margin: EdgeInsets.only(
-                    top: 13,
+                    top: 5,
+                  ),
+                  child: TextFormField(
+                    controller: usernamecontroller,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Color(0xFFEA8F06))),
+                      focusColor: Color(0xFFEA8F06),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFEA8F06))),
+                      hintText: 'Username',
+                    ),
+                    validator: MultiValidator([
+                      RequiredValidator(errorText: "Masukkan  Username"),
+                      EmailValidator(errorText: "Username tidak valid"),
+                    ]),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    top: 5,
                   ),
                   child: TextFormField(
                     controller: passwordcontroller,
@@ -146,44 +187,54 @@ class FormReg extends StatelessWidget {
                     obscureText: true,
                   ),
                 ),
-                TextFormField(
-                  controller: numbercontroller,
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Color(0xFFEA8F06))),
-                    focusColor: Color(0xFFEA8F06),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFEA8F06))),
-                    hintText: 'No. Telp',
+                Container(
+                  margin: EdgeInsets.only(
+                    top: 5,
                   ),
-                  validator: MultiValidator([
-                    RequiredValidator(errorText: "Masukkan No.Telp"),
-                    EmailValidator(errorText: "No. Telp tidak valid"),
-                  ]),
+                  child: TextFormField(
+                    controller: numbercontroller,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Color(0xFFEA8F06))),
+                      focusColor: Color(0xFFEA8F06),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFEA8F06))),
+                      hintText: 'No. Telp',
+                    ),
+                    validator: MultiValidator([
+                      RequiredValidator(errorText: "Masukkan No.Telp"),
+                      EmailValidator(errorText: "No. Telp tidak valid"),
+                    ]),
+                  ),
                 ),
-                TextFormField(
-                  controller: idnumbercontroller,
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Color(0xFFEA8F06))),
-                    focusColor: Color(0xFFEA8F06),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFEA8F06))),
-                    hintText: 'No. KTP',
+                Container(
+                  margin: EdgeInsets.only(
+                    top: 5,
                   ),
-                  validator: MultiValidator([
-                    RequiredValidator(errorText: "Masukkan No.Ktp"),
-                    EmailValidator(errorText: "No. KTP tidal valid"),
-                  ]),
+                  child: TextFormField(
+                    controller: idnumbercontroller,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Color(0xFFEA8F06))),
+                      focusColor: Color(0xFFEA8F06),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFEA8F06))),
+                      hintText: 'No. KTP',
+                    ),
+                    validator: MultiValidator([
+                      RequiredValidator(errorText: "Masukkan No.Ktp"),
+                      EmailValidator(errorText: "No. KTP tidal valid"),
+                    ]),
+                  ),
                 ),
               ],
             ),
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: size.height * 0.05),
+          padding: EdgeInsets.only(top: size.height * 0.025),
           child: Container(
             height: 55.0,
             child: Material(
@@ -195,15 +246,35 @@ class FormReg extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(10.0))),
                 onPressed: () async {
-                  final String name = namecontroller.text;
-                  final String email = emailcontroller.text;
-                  final String username = usernamecontroller.text;
-                  final String password = passwordcontroller.text;
-                  final String number = numbercontroller.text;
-                  final String idnumber = idnumbercontroller.text;
+                  final ApiRegister driver = await registerapi();
+                  saveDataDriver() async {
+                    final driverStorage = await SharedPreferences.getInstance();
+                    driverStorage.setInt("driver_id", driver.values.insertId);
+                    // ignore: non_constant_identifier_names
+                    int driver_id = driverStorage.getInt("driver_id");
+                    final PostLoc location =
+                        await postLoc(driver.values.insertId);
+                    if (location.status == 200) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return Home(driver_id);
+                          },
+                        ),
+                      );
+                    } else {
+                      this.condition = "Please Turn On Your GPS";
+                      print(condition);
+                    }
+                  }
 
-                  final ApiRegister user = await registerapi(
-                      name, email, username, password, number, idnumber);
+                  if (driver.status == 200) {
+                    // ignore: unused_element
+                    saveDataDriver();
+                  } else {
+                    this.condition = "Error";
+                  }
                 },
                 child: Center(
                   child: Text(

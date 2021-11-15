@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:show_bakso/API/markerbuilder.dart';
@@ -10,7 +13,9 @@ import 'package:show_bakso/API/userLoc.dart';
 import 'package:show_bakso/screens/Map.dart';
 import 'package:show_bakso/screens/menupanjang.dart';
 import 'package:slide_to_confirm/slide_to_confirm.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 // import 'package:show_bakso/template/dialog.dart';
+import 'dart:ui' as ui;
 
 class Peta2 extends StatefulWidget {
   @override
@@ -28,6 +33,7 @@ class _Peta2State extends State<Peta2> {
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     setCustomMarker();
   }
@@ -51,249 +57,299 @@ class _Peta2State extends State<Peta2> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
-        child: Stack(
-          children: [
-            StreamBuilder<UserLocation>(
-                stream: locationService.locationStream,
-                builder: (_, snapshot) => (snapshot.hasData)
-                    ? GoogleMap(
-                        onMapCreated: _onMapCreated,
-                        markers: _markers,
-                        mapType: MapType.terrain,
-                        zoomControlsEnabled: false,
-                        initialCameraPosition: CameraPosition(
-                          target: LatLng(
-                              snapshot.data.latitude, snapshot.data.longitude),
-                          zoom: 15,
-                        ),
-                      )
-                    : SizedBox()),
-            //  HereMap (
-            //     onMapCreated: onMapCreated,
-            //   ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: size.width * 0.18, top: size.height * 0.1),
-              child: Container(
-                width: size.width * 0.65,
-                height: 66,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 3,
-                      blurRadius: 7,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: size.width * 0.03),
-                      child: Stack(
+      body: Builder(builder: (BuildContext context) {
+        return OfflineBuilder(
+            connectivityBuilder: (BuildContext context,
+                ConnectivityResult connectivity, Widget child) {
+              final bool connected = connectivity != ConnectivityResult.none;
+              return Stack(
+                fit: StackFit.expand,
+                children: [
+                  child,
+                  Positioned(
+                      left: 0.0,
+                      right: 0.0,
+                      height: 70.0,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        color: connected ? null : Color(0xFFEE4400),
+                        child: connected
+                            ? null
+                            : Container(
+                                margin: EdgeInsets.only(right: 10, top: 20),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                        margin: EdgeInsets.only(right: 5),
+                                        child: Text("OFFLINE",
+                                            style: TextStyle(
+                                                color: Colors.white))),
+                                    SizedBox(
+                                      width: 12.0,
+                                      height: 12.0,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.0,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Colors.white),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                      ))
+                ],
+              );
+            },
+            child: Container(
+              child: Stack(
+                children: [
+                  StreamBuilder<UserLocation>(
+                      stream: locationService.locationStream,
+                      builder: (_, snapshot) => (snapshot.hasData)
+                          ? GoogleMap(
+                              onMapCreated: _onMapCreated,
+                              markers: _markers,
+                              mapType: MapType.terrain,
+                              zoomControlsEnabled: false,
+                              initialCameraPosition: CameraPosition(
+                                target: LatLng(snapshot.data.latitude,
+                                    snapshot.data.longitude),
+                                zoom: 15,
+                              ),
+                            )
+                          : SizedBox()),
+                  //  HereMap (
+                  //     onMapCreated: onMapCreated,
+                  //   ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: size.width * 0.18, top: size.height * 0.1),
+                    child: Container(
+                      width: size.width * 0.65,
+                      height: 66,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 3,
+                            blurRadius: 7,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Row(
                         children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: size.width * 0.03),
+                            child: Stack(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    top: 20,
+                                  ),
+                                  child: Container(
+                                    width: size.width * 0.14,
+                                    height: 25.87,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              "assets/images/mangkuk.jpg"),
+                                          fit: BoxFit.fill),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      EdgeInsets.only(left: size.width * 0.021),
+                                  child: Container(
+                                    child: Text(
+                                      "18",
+                                      style: TextStyle(
+                                          fontSize: size.width * 0.09),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                           Padding(
                             padding: EdgeInsets.only(
-                              top: 20,
+                                top: 13, left: size.width * 0.025),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  child: Text(
+                                    "total transaksi",
+                                    style: TextStyle(
+                                        fontSize: size.width * 0.03,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5),
+                                  child: Container(
+                                    child: Text(
+                                      "Rp 200.000",
+                                      style: TextStyle(
+                                          fontSize: size.width * 0.042,
+                                          fontFamily: 'Poppins',
+                                          color: Colors.grey),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            child: Container(
-                              width: size.width * 0.14,
-                              height: 25.87,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image:
-                                        AssetImage("assets/images/mangkuk.jpg"),
-                                    fit: BoxFit.fill),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Menupanjang(),
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.only(left: size.width * 0.07),
+                              child: Container(
+                                width: 42.68,
+                                height: 42.68,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 3,
+                                      color: const Color(0xffEA8F06),
+                                    ),
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: Center(
+                                  child: Icon(
+                                    CupertinoIcons.add,
+                                    color: const Color(0xffEA8F06),
+                                    size: 30,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: size.width * 0.021),
-                            child: Container(
-                              child: Text(
-                                "18",
-                                style: TextStyle(fontSize: size.width * 0.09),
-                              ),
-                            ),
-                          )
                         ],
                       ),
                     ),
-                    Padding(
-                      padding:
-                          EdgeInsets.only(top: 13, left: size.width * 0.025),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            child: Text(
-                              "total transaksi",
-                              style: TextStyle(
-                                  fontSize: size.width * 0.03,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5),
-                            child: Container(
-                              child: Text(
-                                "Rp 200.000",
-                                style: TextStyle(
-                                    fontSize: size.width * 0.042,
-                                    fontFamily: 'Poppins',
-                                    color: Colors.grey),
-                              ),
-                            ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: size.width * 0.05, top: size.height * 0.7),
+                    child: Container(
+                      width: size.width * 0.45,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 3,
+                            blurRadius: 7,
+                            offset: Offset(0, 3),
                           ),
                         ],
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Menupanjang(),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.only(left: size.width * 0.07),
-                        child: Container(
-                          width: 42.68,
-                          height: 42.68,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 3,
+                      child: GestureDetector(
+                        onTap: () {
+                          _showDialog(context);
+                        },
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: size.width * 0.02),
+                              child: Icon(
+                                Icons.arrow_drop_up_rounded,
+                                size: size.width * 0.13,
                                 color: const Color(0xffEA8F06),
                               ),
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Center(
-                            child: Icon(
-                              CupertinoIcons.add,
-                              color: const Color(0xffEA8F06),
-                              size: 30,
                             ),
-                          ),
+                            Padding(
+                              padding: EdgeInsets.only(left: size.width * 0.03),
+                              child: Text(
+                                "bantuan",
+                                style: TextStyle(
+                                    fontSize: size.width * 0.05,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: size.width * 0.05, top: size.height * 0.7),
-              child: Container(
-                width: size.width * 0.45,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 3,
-                      blurRadius: 7,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    _showDialog(context);
-                  },
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: size.width * 0.02),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: size.width * 0.8, top: size.height * 0.7),
+                    child: Container(
+                      width: 55,
+                      height: 55,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(50),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 3,
+                            blurRadius: 7,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Center(
                         child: Icon(
-                          Icons.arrow_drop_up_rounded,
-                          size: size.width * 0.13,
+                          CupertinoIcons.location,
+                          size: 40,
                           color: const Color(0xffEA8F06),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(left: size.width * 0.03),
-                        child: Text(
-                          "bantuan",
-                          style: TextStyle(
-                              fontSize: size.width * 0.05,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.bold),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: size.width * 0.8, top: size.height * 0.7),
-              child: Container(
-                width: 55,
-                height: 55,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(50),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 3,
-                      blurRadius: 7,
-                      offset: Offset(0, 3),
                     ),
-                  ],
-                ),
-                child: Center(
-                  child: Icon(
-                    CupertinoIcons.location,
-                    size: 40,
-                    color: const Color(0xffEA8F06),
                   ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: size.width * 0.05, top: size.height * 0.8),
-              child: Container(
-                width: size.width * 0.9,
-                height: 77.54,
-                child: ConfirmationSlider(
-                  height: 77.54,
-                  foregroundColor: Color(0xffEA5806),
-                  foregroundShape: BorderRadius.circular(50),
-                  backgroundColor: Colors.white,
-                  backgroundShape: BorderRadius.circular(50),
-                  text: "                  Geser untuk Stop Berjualan",
-                  textStyle: TextStyle(
-                      fontSize: 15,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.bold),
-                  onConfirmation: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Peta(),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: size.width * 0.05, top: size.height * 0.8),
+                    child: Container(
+                      width: size.width * 0.9,
+                      height: 77.54,
+                      child: ConfirmationSlider(
+                        height: 77.54,
+                        foregroundColor: Color(0xffEA5806),
+                        foregroundShape: BorderRadius.circular(50),
+                        backgroundColor: Colors.white,
+                        backgroundShape: BorderRadius.circular(50),
+                        text: "                  Geser untuk Stop Berjualan",
+                        textStyle: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.bold),
+                        onConfirmation: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Peta(),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-      ),
+            ));
+      }),
     );
   }
+
+  //
 
 // Widget _createWidget() {
 //     return Container(

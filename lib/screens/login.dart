@@ -1,39 +1,15 @@
-import 'dart:convert';
 import 'package:show_bakso/screens/register.dart';
-import 'package:show_bakso/widget/buttonlogin.dart';
 import 'package:show_bakso/widget/formlog.dart';
 import 'package:show_bakso/widget/sosmed.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class LoginPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   LoginPage({Key key}) : super(key: key);
+  // String condition = "";
   final TextEditingController emailcontroller = TextEditingController();
 
   final TextEditingController passwordcontroller = TextEditingController();
-  Future<PostLoc> postLoc() async {
-    final response = await http.post(
-      Uri.parse('https://liveshow.utter.academy/api/register'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'email': emailcontroller.text,
-        'password': passwordcontroller.text,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      // If the server did return a 201 CREATED response,
-      // then parse the JSON.
-      return PostLoc.fromJson(jsonDecode(response.body));
-    } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
-      throw Exception('Failed');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,18 +54,10 @@ class LoginPage extends StatelessWidget {
                           style: TextStyle(fontSize: size.width * 0.055),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: size.height * 0.1),
-                        child: Container(
-                          child: FormLog(
-                              emailcontroller: emailcontroller,
-                              passwordcontroller: passwordcontroller),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: size.height * 0.05),
-                        child: ButtonLog(size: size),
-                      ),
+                      FormLog(
+                          size: size,
+                          emailcontroller: emailcontroller,
+                          passwordcontroller: passwordcontroller),
                       Padding(
                         padding: EdgeInsets.only(top: size.height * 0.03),
                         child: Container(
