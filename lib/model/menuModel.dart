@@ -1,16 +1,17 @@
 class Bakso {
+  int id;
   int jumlah;
   String name;
   String image;
   int harga;
 
   Bakso({
+    this.id,
     this.jumlah,
     this.name,
     this.image,
     this.harga,
   });
-
 }
 
 class Order {
@@ -25,6 +26,4 @@ class Order {
     this.image,
     this.harga,
   });
-
 }
-

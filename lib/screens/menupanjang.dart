@@ -17,30 +17,35 @@ class Menupanjang extends StatefulWidget {
 }
 
 Bakso menu1 = Bakso(
+    id: 1,
     jumlah: 0,
     name: "Paket Bakso 1",
     image: "assets/images/baksolast.png",
     harga: 16000);
 
 Bakso menu2 = Bakso(
+    id: 2,
     jumlah: 0,
     name: "Paket Bakso 2",
     image: "assets/images/baksolast.png",
     harga: 15000);
 
 Bakso menu3 = Bakso(
+    id: 3,
     jumlah: 0,
     name: "Paket Bakso 3",
     image: "assets/images/baksolast.png",
     harga: 17000);
 
 Bakso menu4 = Bakso(
+    id: 4,
     jumlah: 0,
     name: "Paket Bakso 4",
     image: "assets/images/baksolast.png",
     harga: 18000);
 
 Bakso menu5 = Bakso(
+    id: 5,
     jumlah: 0,
     name: "Paket Bakso 5",
     image: "assets/images/baksolast.png",
