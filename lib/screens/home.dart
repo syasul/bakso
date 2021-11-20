@@ -8,6 +8,7 @@ import 'package:show_bakso/screens/Map2.dart';
 import 'package:slide_to_confirm/slide_to_confirm.dart';
 import 'package:http/http.dart' as http;
 
+// ignore: must_be_immutable
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();

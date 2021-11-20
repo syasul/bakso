@@ -10,15 +10,22 @@ class Payment extends StatefulWidget {
   Bakso order1, order2, order3, order4, order5;
   int jumlah;
 
-  Payment(this.order1, this.order2, this.order3, this.order4, this.order5,
-      {Key key, this.jumlah})
-      : super(key: key);
+  Payment(
+    this.order1,
+    this.order2,
+    this.order3,
+    this.order4,
+    this.order5, {
+    Key key,
+    this.jumlah,
+  }) : super(key: key);
 
   @override
   State<Payment> createState() => _PaymentState();
 }
 
 class _PaymentState extends State<Payment> with TickerProviderStateMixin {
+  List<Bakso> orderku = [];
   TabController _tabController;
   @override
   void initState() {
@@ -158,7 +165,8 @@ class _PaymentState extends State<Payment> with TickerProviderStateMixin {
                                                 locale: 'id',
                                                 symbol: 'Rp ',
                                                 decimalDigits: 0)
-                                            .format(num.parse((total).toString())),
+                                            .format(
+                                                num.parse((total).toString())),
                                         style: TextStyle(
                                             fontFamily: 'Poppins',
                                             color: Colors.white),
@@ -249,6 +257,21 @@ class _PaymentState extends State<Payment> with TickerProviderStateMixin {
                               ),
                               GestureDetector(
                                 onTap: () {
+                                  if (widget.order1.jumlah > 0) {
+                                    orderku.add(widget.order1);
+                                  }
+                                  if (widget.order2.jumlah > 0) {
+                                    orderku.add(widget.order2);
+                                  }
+                                  if (widget.order3.jumlah > 0) {
+                                    orderku.add(widget.order3);
+                                  }
+                                  if (widget.order4.jumlah > 0) {
+                                    orderku.add(widget.order4);
+                                  }
+                                  if (widget.order5.jumlah > 0) {
+                                    orderku.add(widget.order5);
+                                  }
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(

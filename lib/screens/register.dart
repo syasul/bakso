@@ -2,7 +2,6 @@ import 'package:show_bakso/widget/form%20+%20button_reg.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
   RegisterPage({Key key}) : super(key: key);
 
   final TextEditingController emailcontroller = TextEditingController();

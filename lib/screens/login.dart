@@ -4,7 +4,6 @@ import 'package:show_bakso/widget/sosmed.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
   LoginPage({Key key}) : super(key: key);
   // String condition = "";
   final TextEditingController emailcontroller = TextEditingController();

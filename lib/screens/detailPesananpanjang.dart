@@ -1,8 +1,10 @@
-import 'dart:ffi';
+import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:show_bakso/API/sendApi.dart';
 import 'package:show_bakso/dummy/itemorder.dart';
 import 'package:show_bakso/model/menuModel.dart';
 import 'package:show_bakso/template/tabbar.dart';
@@ -25,6 +27,29 @@ class DetailPesananPanjang extends StatefulWidget {
 }
 
 class _DetailPesananPanjangState extends State<DetailPesananPanjang> {
+  String condition = "";
+
+  Future<SendApi> sendapi() async {
+    final response = await http.post(
+      Uri.parse('https://liveshow.utter.academy/api/semd'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{}),
+    );
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      return SendApi.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -1314,8 +1339,13 @@ class _DetailPesananPanjangState extends State<DetailPesananPanjang> {
                             ),
                           ),
                           Container(
-                            child: ItemTotal(widget.order1, widget.order2,
-                                widget.order3, widget.order4, widget.order5),
+                            child: ItemTotal(
+                              widget.order1,
+                              widget.order2,
+                              widget.order3,
+                              widget.order4,
+                              widget.order5,
+                            ),
                           ),
                           Container(
                             child: Payment(widget.order1, widget.order2,

@@ -1,8 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:show_bakso/API/markerbuilder.dart';
@@ -14,8 +11,6 @@ import 'package:show_bakso/screens/Map.dart';
 import 'package:show_bakso/screens/menupanjang.dart';
 import 'package:slide_to_confirm/slide_to_confirm.dart';
 import 'package:flutter_offline/flutter_offline.dart';
-// import 'package:show_bakso/template/dialog.dart';
-import 'dart:ui' as ui;
 
 class Peta2 extends StatefulWidget {
   @override
