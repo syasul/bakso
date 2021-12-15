@@ -28,7 +28,7 @@ class _Peta2State extends State<Peta2> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    //
     super.initState();
     setCustomMarker();
   }

@@ -1,73 +1,61 @@
 // To parse this JSON data, do
 //
-//     final sendApi = sendApiFromJson(jsonString);
+//     final dataOrder = dataOrderFromJson(jsonString);
 
 import 'dart:convert';
 
-SendApi sendApiFromJson(String str) => SendApi.fromJson(json.decode(str));
+DataOrder dataOrderFromJson(String str) => DataOrder.fromJson(json.decode(str));
 
-String sendApiToJson(SendApi data) => json.encode(data.toJson());
+String dataOrderToJson(DataOrder data) => json.encode(data.toJson());
 
-class SendApi {
-  SendApi({
+class DataOrder {
+  DataOrder({
     this.status,
     this.values,
   });
 
   int status;
-  Values values;
+  List<Value> values;
 
-  factory SendApi.fromJson(Map<String, dynamic> json) => SendApi(
+  factory DataOrder.fromJson(Map<String, dynamic> json) => DataOrder(
         status: json["status"],
-        values: Values.fromJson(json["values"]),
+        values: List<Value>.from(json["values"].map((x) => Value.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "values": values.toJson(),
+        "values": List<dynamic>.from(values.map((x) => x.toJson())),
       };
 }
 
-class Values {
-  Values({
-    this.fieldCount,
-    this.affectedRows,
-    this.insertId,
-    this.serverStatus,
-    this.warningCount,
-    this.message,
-    this.protocol41,
-    this.changedRows,
+class Value {
+  Value({
+    this.orderId,
+    this.menuId,
+    this.driverId,
+    this.price,
+    this.pieces,
   });
 
-  int fieldCount;
-  int affectedRows;
-  int insertId;
-  int serverStatus;
-  int warningCount;
-  String message;
-  bool protocol41;
-  int changedRows;
+  int orderId;
+  int menuId;
+  int driverId;
+  String price;
+  String pieces;
 
-  factory Values.fromJson(Map<String, dynamic> json) => Values(
-        fieldCount: json["fieldCount"],
-        affectedRows: json["affectedRows"],
-        insertId: json["insertId"],
-        serverStatus: json["serverStatus"],
-        warningCount: json["warningCount"],
-        message: json["message"],
-        protocol41: json["protocol41"],
-        changedRows: json["changedRows"],
+  factory Value.fromJson(Map<String, dynamic> json) => Value(
+        orderId: json["order_id"],
+        menuId: json["menu_id"],
+        driverId: json["driver_id"],
+        price: json["price"],
+        pieces: json["pieces"],
       );
 
   Map<String, dynamic> toJson() => {
-        "fieldCount": fieldCount,
-        "affectedRows": affectedRows,
-        "insertId": insertId,
-        "serverStatus": serverStatus,
-        "warningCount": warningCount,
-        "message": message,
-        "protocol41": protocol41,
-        "changedRows": changedRows,
+        "order_id": orderId,
+        "menu_id": menuId,
+        "driver_id": driverId,
+        "price": price,
+        "pieces": pieces,
       };
 }

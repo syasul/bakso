@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:show_bakso/dummy/multyorder.dart';
 import 'package:show_bakso/widget/confbutton.dart';
 import 'package:intl/intl.dart';
 
@@ -8,9 +11,11 @@ class JumlahLain extends StatefulWidget {
   State<JumlahLain> createState() => _JumlahLainState();
   // ignore: non_constant_identifier_names
   num total;
+  List<MultiOrder> multiorder;
 
   JumlahLain(
-    this.total, {
+    this.total,
+    this.multiorder, {
     Key key,
   }) : super(key: key);
 }
@@ -45,7 +50,7 @@ class _JumlahLainState extends State<JumlahLain> {
 
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-
+    print(jsonEncode(widget.multiorder));
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -152,7 +157,10 @@ class _JumlahLainState extends State<JumlahLain> {
                 child: (() {
               if (int.parse(nominal) >= widget.total) {
                 print(int.parse(nominal));
-                return ConfirmationButton(size: size, total: widget.total);
+                return ConfirmationButton(
+                    size: size,
+                    total: widget.total,
+                    multiorder: widget.multiorder);
               }
             }()))
           ],

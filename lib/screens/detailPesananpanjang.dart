@@ -29,7 +29,7 @@ class DetailPesananPanjang extends StatefulWidget {
 class _DetailPesananPanjangState extends State<DetailPesananPanjang> {
   String condition = "";
 
-  Future<SendApi> sendapi() async {
+  Future<DataOrder> dataorder() async {
     final response = await http.post(
       Uri.parse('https://liveshow.utter.academy/api/semd'),
       headers: <String, String>{
@@ -42,7 +42,7 @@ class _DetailPesananPanjangState extends State<DetailPesananPanjang> {
     if (response.statusCode == 200) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
-      return SendApi.fromJson(jsonDecode(response.body));
+      return DataOrder.fromJson(jsonDecode(response.body));
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.

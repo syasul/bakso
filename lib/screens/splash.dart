@@ -27,7 +27,7 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     Geolocator.getCurrentPosition();
     Timer(
-        Duration(seconds: 1),
+        Duration(seconds: 5),
         () => Navigator.pushReplacement(context, MaterialPageRoute(
               builder: (context) {
                 dataCheck();
@@ -56,7 +56,8 @@ class _SplashState extends State<Splash> {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.only(top: size.height * 0.1),
+                padding: EdgeInsets.only(
+                    top: size.height * 0.27, left: size.height * 0.04),
                 child: image,
               ),
             ],

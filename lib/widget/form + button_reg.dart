@@ -60,6 +60,7 @@ class _FormRegState extends State<FormReg> {
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
+
       throw Exception('Failed');
     }
   }
@@ -67,7 +68,7 @@ class _FormRegState extends State<FormReg> {
   Future<PostLoc> postLoc(int id) async {
     Position position = await Geolocator.getCurrentPosition();
     final response = await http.post(
-      Uri.parse('https://liveshow.utter.academy/api/insert'),
+      Uri.parse('https://liveshow.utter.academy/api/location/insert'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -85,6 +86,7 @@ class _FormRegState extends State<FormReg> {
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
+      print(response.statusCode);
       throw Exception('Failed');
     }
   }

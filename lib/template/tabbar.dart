@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
+import 'package:show_bakso/dummy/multyorder.dart';
 import 'package:show_bakso/model/menuModel.dart';
 import 'package:show_bakso/screens/Qr.dart';
 import 'package:show_bakso/screens/jumlah_lain.dart';
@@ -25,7 +28,10 @@ class Payment extends StatefulWidget {
 }
 
 class _PaymentState extends State<Payment> with TickerProviderStateMixin {
-  List<Bakso> orderku = [];
+  String send = "";
+  String condition = "";
+
+  List<MultiOrder> multiorder = [];
   TabController _tabController;
   @override
   void initState() {
@@ -256,26 +262,49 @@ class _PaymentState extends State<Payment> with TickerProviderStateMixin {
                                 ),
                               ),
                               GestureDetector(
-                                onTap: () {
+                                onTap: () async {
                                   if (widget.order1.jumlah > 0) {
-                                    orderku.add(widget.order1);
+                                    multiorder.clear();
+                                    print(widget.order1.jumlah);
+                                    multiorder.add(MultiOrder(
+                                        widget.order1.id,
+                                        widget.order1.jumlah,
+                                        widget.order1.harga));
                                   }
                                   if (widget.order2.jumlah > 0) {
-                                    orderku.add(widget.order2);
+                                    print(widget.order2.jumlah);
+                                    multiorder.add(MultiOrder(
+                                        widget.order2.id,
+                                        widget.order2.jumlah,
+                                        widget.order2.harga));
                                   }
                                   if (widget.order3.jumlah > 0) {
-                                    orderku.add(widget.order3);
+                                    print(widget.order3.jumlah);
+                                    multiorder.add(MultiOrder(
+                                        widget.order3.id,
+                                        widget.order3.jumlah,
+                                        widget.order3.harga));
                                   }
                                   if (widget.order4.jumlah > 0) {
-                                    orderku.add(widget.order4);
+                                    print(widget.order4.jumlah);
+                                    multiorder.add(MultiOrder(
+                                        widget.order4.id,
+                                        widget.order4.jumlah,
+                                        widget.order4.harga));
                                   }
                                   if (widget.order5.jumlah > 0) {
-                                    orderku.add(widget.order5);
+                                    print(widget.order5.jumlah);
+                                    multiorder.add(MultiOrder(
+                                        widget.order5.id,
+                                        widget.order5.jumlah,
+                                        widget.order5.harga));
                                   }
+                                  print(jsonEncode(multiorder));
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => JumlahLain(total),
+                                      builder: (context) =>
+                                          JumlahLain(total, multiorder),
                                     ),
                                   );
                                 },
